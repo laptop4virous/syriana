@@ -114,3 +114,29 @@ main {
   text-decoration: none;
   border-radius: 5px;
 }
+/* كل شيء سابق يبقى كما هو */
+
+#admin-products li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+#admin-products button {
+  margin-left: 5px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+#admin-products .edit {
+  background: #007bff;
+  color: white;
+}
+
+#admin-products .delete {
+  background: red;
+  color: white;
+}
+
