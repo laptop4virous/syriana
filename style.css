@@ -63,5 +63,25 @@ function renderCart() {
   whatsappBtn.href = `https://wa.me/000000000?text=${message}%0Aالمجموع:${total}$`;
 }
 
+.admin {
+  background: white;
+  margin: 20px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.admin input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+
 renderProducts();
 renderCart();
+
