@@ -109,9 +109,10 @@ function renderCart() {
   cartCount.textContent = cart.length;
 
   const message = cart.map(p => `${p.name} - ${p.price}$`).join("%0A");
-  whatsappBtn.href = `https://wa.me/000000000?text=${message}%0Aالمجموع:${total}$`;
+  whatsappBtn.href = `https://wa.me/+31617480704?text=${message}%0Aالمجموع:${total}$`;
 }
 
 // تشغيل عند تحميل الصفحة
 renderProducts();
 renderCart();
+
