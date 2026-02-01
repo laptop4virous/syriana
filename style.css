@@ -1,68 +1,36 @@
-const products = [
-  { id: 1, name: "منتج 1", price: 20, img: "https://via.placeholder.com/200" },
-  { id: 2, name: "منتج 2", price: 35, img: "https://via.placeholder.com/200" },
-  { id: 3, name: "منتج 3", price: 50, img: "https://via.placeholder.com/200" }
-];
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-const productsDiv = document.getElementById("products");
-const cartItems = document.getElementById("cart-items");
-const totalText = document.getElementById("total");
-const cartCount = document.getElementById("cart-count");
-const whatsappBtn = document.getElementById("whatsapp");
-
-function renderProducts() {
-  productsDiv.innerHTML = "";
-  products.forEach(p => {
-    productsDiv.innerHTML += `
-      <div class="product">
-        <img src="${p.img}">
-        <h3>${p.name}</h3>
-        <p>${p.price}$</p>
-        <button onclick="addToCart(${p.id})">أضف للسلة</button>
-      </div>
-    `;
-  });
+/* إعدادات أساسية */
+body {
+  margin: 0;
+  font-family: Tahoma, sans-serif;
+  background: #f2f2f2;
+  direction: rtl;
 }
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  saveCart();
+header {
+  background: #111;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart();
+header button {
+  padding: 8px 12px;
+  cursor: pointer;
+  background: #28a745;
+  border: none;
+  color: white;
+  border-radius: 5px;
 }
 
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+#cart-count {
+  background: red;
+  padding: 5px 10px;
+  border-radius: 50%;
 }
 
-function renderCart() {
-  cartItems.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((item, i) => {
-    total += item.price;
-    cartItems.innerHTML += `
-      <li>
-        ${item.name}
-        <button onclick="removeFromCart(${i})">X</button>
-      </li>
-    `;
-  });
-
-  totalText.textContent = `المجموع: ${total}$`;
-  cartCount.textContent = cart.length;
-
-  const message = cart.map(p => `${p.name} - ${p.price}$`).join("%0A");
-  whatsappBtn.href = `https://wa.me/000000000?text=${message}%0Aالمجموع:${total}$`;
-}
-
+/* لوحة التحكم */
 .admin {
   background: white;
   margin: 20px;
@@ -81,7 +49,72 @@ function renderCart() {
   display: none;
 }
 
+/* المحتوى الرئيسي */
+main {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
 
-renderProducts();
-renderCart();
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 20px;
+  flex: 3;
+}
 
+.product {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.product img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.product button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* سلة الشراء */
+.cart {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.cart li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cart button {
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#whatsapp {
+  display: block;
+  margin-top: 15px;
+  background: #25D366;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+}
