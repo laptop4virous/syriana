@@ -1,12 +1,12 @@
-// مسح أي بيانات قديمة لتجنب مشاكل التحديث
-localStorage.removeItem("products");
-localStorage.removeItem("cart");
+// إعداد كلمة مرور للوصول للوحة التحكم
+const adminPassword = "1234"; // غيرها حسب رغبتك
 
-// بيانات المنتجات
+// قراءة المنتجات من LocalStorage أو إنشاء منتج تجريبي
 let products = JSON.parse(localStorage.getItem("products")) || [
   { name: "منتج تجريبي", price: 20, img: "https://via.placeholder.com/200" }
 ];
 
+// قراءة السلة من LocalStorage
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const productsDiv = document.getElementById("products");
@@ -15,9 +15,14 @@ const totalText = document.getElementById("total");
 const cartCount = document.getElementById("cart-count");
 const whatsappBtn = document.getElementById("whatsapp");
 
-// لوحة التحكم
-function toggleAdmin() {
-  document.getElementById("admin").classList.toggle("hidden");
+// لوحة التحكم مع كلمة مرور
+function promptAdmin() {
+  const pass = prompt("أدخل كلمة مرور الأدمن:");
+  if (pass === adminPassword) {
+    document.getElementById("admin").classList.toggle("hidden");
+  } else {
+    alert("كلمة المرور خاطئة!");
+  }
 }
 
 // عرض المنتجات
@@ -36,7 +41,7 @@ function renderProducts() {
   });
 }
 
-// إضافة منتج جديد من لوحة التحكم
+// إضافة منتج جديد
 function addProduct() {
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
@@ -61,7 +66,7 @@ function deleteProduct(index) {
   saveProducts();
 }
 
-// حفظ المنتجات
+// حفظ المنتجات في LocalStorage
 function saveProducts() {
   localStorage.setItem("products", JSON.stringify(products));
   renderProducts();
@@ -94,7 +99,7 @@ function renderCart() {
     total += Number(item.price);
     cartItems.innerHTML += `
       <li>
-        ${item.name}
+        ${item.name} - ${item.price}$
         <button onclick="removeFromCart(${i})">X</button>
       </li>
     `;
@@ -104,10 +109,9 @@ function renderCart() {
   cartCount.textContent = cart.length;
 
   const message = cart.map(p => `${p.name} - ${p.price}$`).join("%0A");
-  whatsappBtn.href = `https://wa.me/+31617480704?text=${message}%0Aالمجموع:${total}$`;
+  whatsappBtn.href = `https://wa.me/000000000?text=${message}%0Aالمجموع:${total}$`;
 }
 
-// تشغيل عند التحميل
+// تشغيل عند تحميل الصفحة
 renderProducts();
 renderCart();
-
