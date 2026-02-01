@@ -2,15 +2,24 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>متجري الإلكتروني</title>
+  <title>متجري</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
   <h1>🛒 متجري</h1>
-  <span id="cart-count">0</span>
+  <button onclick="toggleAdmin()">لوحة التحكم</button>
 </header>
+
+<!-- لوحة التحكم -->
+<section id="admin" class="admin hidden">
+  <h2>لوحة التحكم</h2>
+  <input id="name" placeholder="اسم المنتج">
+  <input id="price" type="number" placeholder="السعر">
+  <input id="img" placeholder="رابط الصورة">
+  <button onclick="addProduct()">إضافة المنتج</button>
+</section>
 
 <main>
   <section id="products" class="products"></section>
