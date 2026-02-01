@@ -2,13 +2,13 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>متجر سوريانا ماركت Syriana Markt</title>
+  <title>متجر سوريانا ماركت</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>🛒 متجر سوريانا ماركت</h1>
+  <h1>🛒متجر سوريانا ماركت</h1>
   <button onclick="promptAdmin()">لوحة التحكم</button>
   <span id="cart-count">0</span>
 </header>
@@ -20,6 +20,9 @@
   <input id="price" type="number" placeholder="السعر">
   <input id="img" placeholder="رابط الصورة">
   <button onclick="addProduct()">إضافة المنتج</button>
+
+  <h3>قائمة المنتجات</h3>
+  <ul id="admin-products"></ul>
 </section>
 
 <main>
@@ -36,4 +39,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
