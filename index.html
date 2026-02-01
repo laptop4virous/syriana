@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>متجري الإلكتروني</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🛒 متجري</h1>
+  <p>أفضل المنتجات بأفضل الأسعار</p>
+</header>
+
+<section class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/200" alt="">
+    <h3>منتج 1</h3>
+    <p>20$</p>
+    <button onclick="addToCart('منتج 1',20)">أضف للسلة</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/200" alt="">
+    <h3>منتج 2</h3>
+    <p>35$</p>
+    <button onclick="addToCart('منتج 2',35)">أضف للسلة</button>
+  </div>
+</section>
+
+<section class="cart">
+  <h2>🛍️ سلة الشراء</h2>
+  <ul id="cart"></ul>
+  <p id="total">المجموع: 0$</p>
+  <a class="whatsapp" href="https://wa.me/000000000" target="_blank">
+    اطلب عبر واتساب
+  </a>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
