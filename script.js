@@ -1,5 +1,6 @@
 const adminPassword = "1234";
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
 const cartItems = document.getElementById("cart-items");
 const totalText = document.getElementById("total");
 const cartCount = document.getElementById("cart-count");
@@ -15,7 +16,7 @@ function promptAdmin(){
   } else { alert("كلمة المرور خاطئة!"); }
 }
 
-// --- عرض المنتجات على الصفحة ---
+// --- عرض المنتجات ---
 function renderProducts(){
   const productsDiv = document.getElementById("products");
   productsDiv.innerHTML = "";
@@ -34,7 +35,7 @@ function renderProducts(){
   });
 }
 
-// --- لوحة التحكم ---
+// --- لوحة تحكم ---
 function renderAdminProducts(){
   adminProducts.innerHTML = "";
   db.collection("products").get().then(snapshot=>{
@@ -43,8 +44,8 @@ function renderAdminProducts(){
       adminProducts.innerHTML += `
       <li>
         ${p.name} - ${p.price}$
-        <button class="edit" onclick="editProduct('${doc.id}')">تعديل</button>
-        <button class="delete" onclick="deleteProduct('${doc.id}')">حذف</button>
+        <button onclick="editProduct('${doc.id}')">تعديل</button>
+        <button onclick="deleteProduct('${doc.id}')">حذف</button>
       </li>`;
     });
   });
@@ -56,7 +57,13 @@ function addProduct(){
   const img = document.getElementById("img").value;
   if(!name || !price || !img){ alert("عبي كل الحقول"); return; }
   db.collection("products").add({name, price, img})
-    .then(()=> { document.getElementById("name").value=""; document.getElementById("price").value=""; document.getElementById("img").value=""; renderProducts(); renderAdminProducts(); });
+    .then(()=> { 
+      document.getElementById("name").value="";
+      document.getElementById("price").value="";
+      document.getElementById("img").value="";
+      renderProducts(); 
+      renderAdminProducts(); 
+    });
 }
 
 function deleteProduct(id){
@@ -64,15 +71,15 @@ function deleteProduct(id){
 }
 
 function editProduct(id){
-  const docRef = db.collection("products").doc(id);
-  docRef.get().then(doc=>{
+  db.collection("products").doc(id).get().then(doc=>{
     if(doc.exists){
       const p = doc.data();
       const name = prompt("الاسم الجديد:", p.name);
       const price = prompt("السعر الجديد:", p.price);
       const img = prompt("رابط الصورة الجديد:", p.img);
       if(name && price && img){
-        docRef.update({name, price:Number(price), img}).then(()=>{ renderProducts(); renderAdminProducts(); });
+        db.collection("products").doc(id).update({name, price:Number(price), img})
+          .then(()=>{ renderProducts(); renderAdminProducts(); });
       }
     }
   });
