@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>متجر سوريانا ماركت</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>متجر سوريانا ماركت</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>🛒متجر سوريانا ماركت</h1>
-  <button onclick="promptAdmin()">لوحة التحكم</button>
-  <span id="cart-count">0</span>
+<h1>🛒متجر سوريانا ماركت</h1>
+<button onclick="promptAdmin()">لوحة التحكم</button>
+<span id="cart-count">0</span>
 </header>
 
-<!-- لوحة التحكم -->
 <section id="admin" class="admin hidden">
-  <h2>لوحة التحكم</h2>
-  <input id="name" placeholder="اسم المنتج">
-  <input id="price" type="number" placeholder="السعر">
-  <input id="img" placeholder="رابط الصورة">
-  <button onclick="addProduct()">إضافة المنتج</button>
+<h2>لوحة التحكم</h2>
+<input id="name" placeholder="اسم المنتج">
+<input id="price" type="number" placeholder="السعر">
+<input id="img" placeholder="رابط الصورة">
+<button onclick="addProduct()">إضافة المنتج</button>
 
-  <h3>قائمة المنتجات</h3>
-  <ul id="admin-products"></ul>
+<h3>قائمة المنتجات</h3>
+<ul id="admin-products"></ul>
 </section>
 
 <main>
-  <section id="products" class="products"></section>
-
-  <aside class="cart">
-    <h2>سلة الشراء</h2>
-    <ul id="cart-items"></ul>
-    <p id="total">المجموع: 0$</p>
-    <a id="whatsapp" target="_blank">اطلب عبر واتساب</a>
-  </aside>
+<section id="products" class="products"></section>
+<aside class="cart">
+<h2>سلة الشراء</h2>
+<ul id="cart-items"></ul>
+<p id="total">المجموع: 0$</p>
+<a id="whatsapp" target="_blank">اطلب عبر واتساب</a>
+</aside>
 </main>
 
-<!-- Firebase (Compat SDK) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
 <script>
-  // إعداد Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyCKHxD3W3Ei0-vEPFAyq6tpWt1xobV0Lg4",
-    authDomain: "syriana-83fc8.firebaseapp.com",
-    projectId: "syriana-83fc8",
-    storageBucket: "syriana-83fc8.firebasestorage.app",
-    messagingSenderId: "424965345616",
-    appId: "1:424965345616:web:01a1d4f69602901c35dc55",
-    measurementId: "G-Z678SXWZ81"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+const firebaseConfig = {
+apiKey: "AIzaSyCKHxD3W3Ei0-vEPFAyq6tpWt1xobV0Lg4",
+authDomain: "syriana-83fc8.firebaseapp.com",
+projectId: "syriana-83fc8",
+storageBucket: "syriana-83fc8.firebasestorage.app",
+messagingSenderId: "424965345616",
+appId: "1:424965345616:web:01a1d4f69602901c35dc55",
+measurementId: "G-Z678SXWZ81"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 </script>
 
 <script src="script.js"></script>
