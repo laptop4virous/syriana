@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>متجر سوريانا ماركت</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🛒متجر سوريانا ماركت</h1>
+  <button onclick="promptAdmin()">لوحة التحكم</button>
+  <span id="cart-count">0</span>
+</header>
+
+<!-- لوحة التحكم -->
+<section id="admin" class="admin hidden">
+  <h2>لوحة التحكم</h2>
+  <input id="name" placeholder="اسم المنتج">
+  <input id="price" type="number" placeholder="السعر">
+  <input id="img" placeholder="رابط الصورة">
+  <button onclick="addProduct()">إضافة المنتج</button>
+
+  <h3>قائمة المنتجات</h3>
+  <ul id="admin-products"></ul>
+</section>
+
+<main>
+  <section id="products" class="products"></section>
+
+  <aside class="cart">
+    <h2>سلة الشراء</h2>
+    <ul id="cart-items"></ul>
+    <p id="total">المجموع: 0$</p>
+    <a id="whatsapp" target="_blank">اطلب عبر واتساب</a>
+  </aside>
+</main>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+<!-- Script -->
+<script src="script.js"></script>
+</body>
+</html>
