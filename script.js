@@ -29,32 +29,50 @@ function promptAdmin() {
   const pass = prompt("أدخل كلمة مرور الأدمن:");
   if (pass === adminPassword) {
     document.getElementById("admin").classList.toggle("hidden");
-    renderAdminProducts();
   } else {
     alert("كلمة المرور خاطئة!");
   }
 }
 
-// عرض المنتجات من Firestore
-function renderProducts() {
+// Listener للمنتجات بشكل حي
+db.collection("products").onSnapshot((snapshot) => {
+  renderProducts(snapshot);
+  renderAdminProducts(snapshot);
+});
+
+// عرض المنتجات
+function renderProducts(snapshot) {
   productsDiv.innerHTML = "";
-  db.collection("products").get().then(snapshot => {
-    snapshot.forEach((doc, index) => {
-      const p = doc.data();
-      productsDiv.innerHTML += `
-        <div class="product">
-          <img src="${p.img}">
-          <h3>${p.name}</h3>
-          <p>${p.price}$</p>
-          <input type="number" value="1" min="1" id="qty-${doc.id}" onchange="updateCartQty('${doc.id}')">
-          <button onclick="addToCart('${doc.id}')">أضف للسلة</button>
-        </div>
-      `;
-    });
+  snapshot.forEach((doc) => {
+    const p = doc.data();
+    productsDiv.innerHTML += `
+      <div class="product">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+        <p>${p.price}$</p>
+        <input type="number" value="1" min="1" id="qty-${doc.id}">
+        <button onclick="addToCart('${doc.id}')">أضف للسلة</button>
+      </div>
+    `;
   });
 }
 
-// إضافة منتج جديد إلى Firestore
+// عرض المنتجات في لوحة التحكم
+function renderAdminProducts(snapshot) {
+  adminProducts.innerHTML = "";
+  snapshot.forEach((doc) => {
+    const p = doc.data();
+    adminProducts.innerHTML += `
+      <li>
+        ${p.name} - ${p.price}$
+        <button class="edit" onclick="editProduct('${doc.id}')">تعديل</button>
+        <button class="delete" onclick="deleteProduct('${doc.id}')">حذف</button>
+      </li>
+    `;
+  });
+}
+
+// إضافة منتج جديد
 function addProduct() {
   const name = document.getElementById("name").value;
   const price = Number(document.getElementById("price").value);
@@ -67,15 +85,7 @@ function addProduct() {
       document.getElementById("name").value = "";
       document.getElementById("price").value = "";
       document.getElementById("img").value = "";
-      renderProducts();
-      renderAdminProducts();
     });
-}
-
-// حذف منتج
-function deleteProduct(id) {
-  db.collection("products").doc(id).delete()
-    .then(() => renderAdminProducts());
 }
 
 // تعديل منتج
@@ -87,28 +97,14 @@ function editProduct(id) {
     const newPrice = prompt("السعر الجديد:", doc.data().price);
     const newImg = prompt("رابط الصورة الجديد:", doc.data().img);
     if(newName && newPrice && newImg){
-      docRef.update({ name: newName, price: Number(newPrice), img: newImg })
-        .then(() => renderAdminProducts())
-        .then(() => renderProducts());
+      docRef.update({ name: newName, price: Number(newPrice), img: newImg });
     }
   });
 }
 
-// عرض المنتجات في لوحة التحكم
-function renderAdminProducts() {
-  adminProducts.innerHTML = "";
-  db.collection("products").get().then(snapshot => {
-    snapshot.forEach((doc) => {
-      const p = doc.data();
-      adminProducts.innerHTML += `
-        <li>
-          ${p.name} - ${p.price}$
-          <button class="edit" onclick="editProduct('${doc.id}')">تعديل</button>
-          <button class="delete" onclick="deleteProduct('${doc.id}')">حذف</button>
-        </li>
-      `;
-    });
-  });
+// حذف منتج
+function deleteProduct(id) {
+  db.collection("products").doc(id).delete();
 }
 
 // إضافة للسلة
@@ -119,14 +115,6 @@ function addToCart(id) {
     cart.push(item);
     saveCart();
   });
-}
-
-// تحديث كمية منتج في السلة
-function updateCartQty(id) {
-  const qty = Number(document.getElementById(`qty-${id}`).value) || 1;
-  const item = cart.find(i => i.name === document.getElementById(`qty-${id}`).dataset.name);
-  if (item) item.qty = qty;
-  saveCart();
 }
 
 // إزالة من السلة
@@ -164,5 +152,4 @@ function renderCart() {
 }
 
 // تشغيل عند التحميل
-renderProducts();
 renderCart();
