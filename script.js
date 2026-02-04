@@ -1,129 +1,127 @@
-// كلمة مرور الأدمن
+import { db } from './index.html';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
 const adminPassword = "1234";
 
+const productsCol = collection(db, "products");
+
+const productsDiv = document.getElementById("products");
 const cartItems = document.getElementById("cart-items");
 const totalText = document.getElementById("total");
 const cartCount = document.getElementById("cart-count");
 const whatsappBtn = document.getElementById("whatsapp");
-const productsDiv = document.getElementById("products");
 const adminProducts = document.getElementById("admin-products");
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCKHxD3W3Ei0-vEPFAyq6tpWt1xobV0Lg4",
-  authDomain: "syriana-83fc8.firebaseapp.com",
-  projectId: "syriana-83fc8",
-  storageBucket: "syriana-83fc8.firebasestorage.app",
-  messagingSenderId: "424965345616",
-  appId: "1:424965345616:web:01a1d4f69602901c35dc55"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// لوحة التحكم بكلمة مرور
 function promptAdmin() {
   const pass = prompt("أدخل كلمة مرور الأدمن:");
   if (pass === adminPassword) {
     document.getElementById("admin").classList.toggle("hidden");
+    renderAdminProducts();
   } else {
     alert("كلمة المرور خاطئة!");
   }
 }
 
-// Listener للمنتجات بشكل حي
-db.collection("products").onSnapshot((snapshot) => {
-  renderProducts(snapshot);
-  renderAdminProducts(snapshot);
+// جلب المنتجات وعرضها مباشرة عند التغيير
+onSnapshot(productsCol, (snapshot) => {
+  const products = [];
+  snapshot.forEach(docSnap => {
+    products.push({ id: docSnap.id, ...docSnap.data() });
+  });
+  renderProducts(products);
+  renderAdminProducts(products);
 });
 
 // عرض المنتجات
-function renderProducts(snapshot) {
+function renderProducts(products) {
   productsDiv.innerHTML = "";
-  snapshot.forEach((doc) => {
-    const p = doc.data();
+  products.forEach((p) => {
     productsDiv.innerHTML += `
       <div class="product">
         <img src="${p.img}">
         <h3>${p.name}</h3>
         <p>${p.price}$</p>
-        <input type="number" value="1" min="1" id="qty-${doc.id}">
-        <button onclick="addToCart('${doc.id}')">أضف للسلة</button>
+        <input type="number" value="1" min="1" id="qty-${p.id}" onchange="updateCartQty('${p.id}')">
+        <button onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.img}')">أضف للسلة</button>
       </div>
     `;
   });
 }
 
-// عرض المنتجات في لوحة التحكم
-function renderAdminProducts(snapshot) {
-  adminProducts.innerHTML = "";
-  snapshot.forEach((doc) => {
-    const p = doc.data();
-    adminProducts.innerHTML += `
-      <li>
-        ${p.name} - ${p.price}$
-        <button class="edit" onclick="editProduct('${doc.id}')">تعديل</button>
-        <button class="delete" onclick="deleteProduct('${doc.id}')">حذف</button>
-      </li>
-    `;
+// لوحة التحكم
+function renderAdminProducts() {
+  getDocs(productsCol).then(snapshot => {
+    const products = [];
+    snapshot.forEach(docSnap => products.push({ id: docSnap.id, ...docSnap.data() }));
+    adminProducts.innerHTML = "";
+    products.forEach((p) => {
+      adminProducts.innerHTML += `
+        <li>
+          ${p.name} - ${p.price}$
+          <button class="edit" onclick="editProduct('${p.id}', '${p.name}', ${p.price}, '${p.img}')">تعديل</button>
+          <button class="delete" onclick="deleteProduct('${p.id}')">حذف</button>
+        </li>
+      `;
+    });
   });
 }
 
 // إضافة منتج جديد
-function addProduct() {
+window.addProduct = async function() {
   const name = document.getElementById("name").value;
   const price = Number(document.getElementById("price").value);
   const img = document.getElementById("img").value;
 
   if (!name || !price || !img) { alert("عبي كل الحقول"); return; }
 
-  db.collection("products").add({ name, price, img })
-    .then(() => {
-      document.getElementById("name").value = "";
-      document.getElementById("price").value = "";
-      document.getElementById("img").value = "";
-    });
-}
+  await addDoc(productsCol, { name, price, img });
+
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("img").value = "";
+};
 
 // تعديل منتج
-function editProduct(id) {
-  const docRef = db.collection("products").doc(id);
-  docRef.get().then(doc => {
-    if (!doc.exists) return;
-    const newName = prompt("الاسم الجديد:", doc.data().name);
-    const newPrice = prompt("السعر الجديد:", doc.data().price);
-    const newImg = prompt("رابط الصورة الجديد:", doc.data().img);
-    if(newName && newPrice && newImg){
-      docRef.update({ name: newName, price: Number(newPrice), img: newImg });
-    }
-  });
-}
+window.editProduct = async function(id, oldName, oldPrice, oldImg) {
+  const newName = prompt("الاسم الجديد:", oldName);
+  const newPrice = prompt("السعر الجديد:", oldPrice);
+  const newImg = prompt("رابط الصورة الجديد:", oldImg);
+  if (newName && newPrice && newImg) {
+    const productDoc = doc(db, "products", id);
+    await updateDoc(productDoc, { name: newName, price: Number(newPrice), img: newImg });
+  }
+};
 
 // حذف منتج
-function deleteProduct(id) {
-  db.collection("products").doc(id).delete();
-}
+window.deleteProduct = async function(id) {
+  const productDoc = doc(db, "products", id);
+  await deleteDoc(productDoc);
+};
 
 // إضافة للسلة
-function addToCart(id) {
+window.addToCart = function(id, name, price, img) {
   const qty = Number(document.getElementById(`qty-${id}`).value) || 1;
-  db.collection("products").doc(id).get().then(doc => {
-    const item = { ...doc.data(), qty };
-    cart.push(item);
-    saveCart();
-  });
-}
+  const item = { id, name, price, img, qty };
+  cart.push(item);
+  saveCart();
+};
+
+// تحديث كمية المنتج في السلة
+window.updateCartQty = function(id) {
+  const item = cart.find(i => i.id === id);
+  if (item) item.qty = Number(document.getElementById(`qty-${id}`).value);
+  saveCart();
+};
 
 // إزالة من السلة
-function removeFromCart(index) {
+window.removeFromCart = function(index) {
   cart.splice(index, 1);
   saveCart();
-}
+};
 
-// حفظ السلة
+// حفظ وعرض السلة
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
@@ -133,7 +131,6 @@ function saveCart() {
 function renderCart() {
   cartItems.innerHTML = "";
   let total = 0;
-
   cart.forEach((item, i) => {
     total += item.price * (item.qty || 1);
     cartItems.innerHTML += `
@@ -143,13 +140,9 @@ function renderCart() {
       </li>
     `;
   });
-
   totalText.textContent = `المجموع: ${total}$`;
   cartCount.textContent = cart.length;
 
   const message = cart.map(p => `${p.name} - ${p.price}$ x ${p.qty || 1}`).join("%0A");
   whatsappBtn.href = `https://wa.me/000000000?text=${message}%0Aالمجموع:${total}$`;
 }
-
-// تشغيل عند التحميل
-renderCart();
