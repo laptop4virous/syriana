@@ -7,21 +7,34 @@ const cartCount = document.getElementById("cart-count");
 const whatsappBtn = document.getElementById("whatsapp");
 const adminProducts = document.getElementById("admin-products");
 
+// Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCKHxD3W3Ei0-vEPFAyq6tpWt1xobV0Lg4",
+  authDomain: "syriana-83fc8.firebaseapp.com",
+  projectId: "syriana-83fc8",
+  storageBucket: "syriana-83fc8.firebasestorage.app",
+  messagingSenderId: "424965345616",
+  appId: "1:424965345616:web:01a1d4f69602901c35dc55",
+  measurementId: "G-Z678SXWZ81"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 // --- لوحة التحكم ---
-function promptAdmin(){
+function promptAdmin() {
   const pass = prompt("كلمة مرور الأدمن:");
-  if(pass===adminPassword){
+  if(pass === adminPassword){
     document.getElementById("admin").classList.toggle("hidden");
     renderAdminProducts();
   } else { alert("كلمة المرور خاطئة!"); }
 }
 
 // --- عرض المنتجات ---
-function renderProducts(){
+function renderProducts() {
   const productsDiv = document.getElementById("products");
   productsDiv.innerHTML = "";
-  db.collection("products").get().then(snapshot=>{
-    snapshot.forEach(doc=>{
+  db.collection("products").get().then(snapshot => {
+    snapshot.forEach(doc => {
       const p = doc.data();
       productsDiv.innerHTML += `
       <div class="product">
@@ -36,7 +49,7 @@ function renderProducts(){
 }
 
 // --- لوحة تحكم ---
-function renderAdminProducts(){
+function renderAdminProducts() {
   adminProducts.innerHTML = "";
   db.collection("products").get().then(snapshot=>{
     snapshot.forEach(doc=>{
@@ -51,23 +64,26 @@ function renderAdminProducts(){
   });
 }
 
-function addProduct(){
+function addProduct() {
   const name = document.getElementById("name").value;
   const price = Number(document.getElementById("price").value);
   const img = document.getElementById("img").value;
   if(!name || !price || !img){ alert("عبي كل الحقول"); return; }
   db.collection("products").add({name, price, img})
-    .then(()=> { 
+    .then(()=> {
       document.getElementById("name").value="";
       document.getElementById("price").value="";
       document.getElementById("img").value="";
-      renderProducts(); 
-      renderAdminProducts(); 
+      renderProducts();
+      renderAdminProducts();
     });
 }
 
 function deleteProduct(id){
-  db.collection("products").doc(id).delete().then(()=>{ renderProducts(); renderAdminProducts(); });
+  db.collection("products").doc(id).delete().then(()=>{
+    renderProducts();
+    renderAdminProducts();
+  });
 }
 
 function editProduct(id){
