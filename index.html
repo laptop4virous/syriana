@@ -1,70 +1,47 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <title>متجر سوريانا ماركت</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+Web apps
+syriana-markt-10
+Web app
+App nickname
+syriana-markt-10
+App ID
+1:165199547512:web:e6124bdbfa4cfe4739f18d
+Linked Firebase Hosting site
+syriana-markt-10
 
-<header>
-  <h1>🛒متجر سوريانا ماركت</h1>
-  <button onclick="promptAdmin()">لوحة التحكم</button>
-  <span id="cart-count">0</span>
-</header>
+SDK setup and configuration
 
-<!-- لوحة التحكم -->
-<section id="admin" class="admin hidden">
-  <h2>لوحة التحكم</h2>
-  <input id="name" placeholder="اسم المنتج">
-  <input id="price" type="number" placeholder="السعر">
-  <input id="img" placeholder="رابط الصورة">
-  <button onclick="addProduct()">إضافة المنتج</button>
+npm
 
-  <h3>قائمة المنتجات</h3>
-  <ul id="admin-products"></ul>
-</section>
+CDN
 
-<main>
-  <section id="products" class="products"></section>
+Config
+If you're already using NPM and a module bundler such as webpack or Rollup, you can run the following command to install the latest SDK (Learn more):
 
-  <aside class="cart">
-    <h2>سلة الشراء</h2>
-    <ul id="cart-items"></ul>
-    <p id="total">المجموع: 0$</p>
-    <a id="whatsapp" target="_blank">اطلب عبر واتساب</a>
-  </aside>
-</main>
+npm install firebase
+Then, initialise Firebase and begin using the SDKs for the products that you'd like to use.
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-<!-- Script -->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD0uhGhSsbNBL0VogBFPORXsbgqippZFBo",
+  authDomain: "syriana-markt-10.firebaseapp.com",
+  projectId: "syriana-markt-10",
+  storageBucket: "syriana-markt-10.firebasestorage.app",
+  messagingSenderId: "165199547512",
+  appId: "1:165199547512:web:e6124bdbfa4cfe4739f18d",
+  measurementId: "G-3ZSYK17CPE"
+};
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0uhGhSsbNBL0VogBFPORXsbgqippZFBo",
-    authDomain: "syriana-markt-10.firebaseapp.com",
-    projectId: "syriana-markt-10",
-    storageBucket: "syriana-markt-10.firebasestorage.app",
-    messagingSenderId: "165199547512",
-    appId: "1:165199547512:web:e6124bdbfa4cfe4739f18d",
-    measurementId: "G-3ZSYK17CPE"
-  };
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+Note: This option uses the modular JavaScript SDK, which provides a reduced SDK size.
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<script src="script.js"></script>
-</body>
-</html>
+Learn more about Firebase for web: Get started, Web SDK API Reference, Samples
 
