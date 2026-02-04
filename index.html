@@ -35,15 +35,13 @@
     <a id="whatsapp" target="_blank">اطلب عبر واتساب</a>
   </aside>
 </main>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+<!-- Firebase App (Core SDK) + Firestore (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+<script>
+  // إعداد Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCKHxD3W3Ei0-vEPFAyq6tpWt1xobV0Lg4",
     authDomain: "syriana-83fc8.firebaseapp.com",
@@ -54,16 +52,11 @@
     measurementId: "G-Z678SXWZ81"
   };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  // Initialize Firebase (compat)
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 </script>
-  <!-- Firebase App (Core SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
